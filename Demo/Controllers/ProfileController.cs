@@ -201,7 +201,14 @@ public class ProfileController : Controller
             // 重新带回已有列表，让页面验证失败时仍能显示数据
             var u = await GetCurrentUserAsync();
             vm.ExistingJobExperiences = u?.JobExperiences ?? new List<JobExperience>();
-            ModelState.DebugErrors();
+            return View("CareerHistory", vm);
+        }
+
+        if(vm.StartYear >= vm.EndYear && vm.StartMonth > vm.EndMonth)
+        {
+            var u = await GetCurrentUserAsync();
+            vm.ExistingJobExperiences = u?.JobExperiences ?? new List<JobExperience>();
+            ModelState.AddModelError("StartMonth", "Start year cannot more than End year!");
             return View("CareerHistory", vm);
         }
 
