@@ -420,10 +420,11 @@ public class AccountController : Controller
     [HttpPost]
     public IActionResult ForgotPassword(ForgotPasswordVM vm)
     {
-        var user = db.Users.FirstOrDefault(u => u.Email == vm.Email);
-        if (user == null)
+        var userId = User.GetUserId();
+        var user = db.Users.Find(userId);
+        if (user == null || user.Email != vm.Email)
         {
-            ModelState.AddModelError("", "邮箱不存在");
+            ModelState.AddModelError("Email", "Email is not exits or Email is not valid");
             return View(vm);
         }
 
